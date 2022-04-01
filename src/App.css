@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: none;
+  outline: 0;
+}
+
+:root {
+  --delete-button: #d83c3c;
+  --edit-button: #0c9c43;
+  --primary-green: #46b0ab;
+  --secundary-green: #57cbc5;
+  --terciary-green: #439b96; /* #9eadac */
+  --primary-gray: #f1f1f1;
+  --secundary-gray: #f7f7f7;
+  --input-shadow: #c1c1c1;
+  --box-shadow: #cfcfcf;
+  --contact-title: #398580;
+  --contact-background: #257873;
+  --text-color: #383838;
+  --title-color: #818181;
+  font-family: Poppins, sans-serif;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  background-color: white;
+}
+
+header {
+  padding: 0.4rem;
+  display: flex;
+  justify-content: center;
+
+  color: white;
+  font-size: 2rem;
+  font-family: Lobster, sans-serif;
+  background-color: var(--primary-green);
+  box-shadow: 1px 1px #e7e7e7;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  cursor: pointer;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.title {
+  color: var(--title-color);
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+  margin: 2rem 0;
+}
+
+.text {
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 300;
+  margin: 0.8rem 0 0.4rem 0;
+}
+
+.Form-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 4rem;
+  width: 100%;
+  /* box-shadow: 0px 0px 1px 1px var(--input-shadow); */
+}

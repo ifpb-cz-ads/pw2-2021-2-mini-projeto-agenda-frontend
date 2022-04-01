@@ -14,12 +14,13 @@ export default function Login() {
     e.preventDefault();
 
     if (email && password) {
-      api
+      await api
         .post('/users/login', { email, password })
         .then((res) => {
-          console.log(res.data);
           const { token, isAdmin } = res.data;
           login(email, password, token, isAdmin);
+          localStorage.setItem('token',token);
+          console.log(res.data)
         })
         .catch((err) => console.error(err));
     }
@@ -39,7 +40,7 @@ export default function Login() {
           type='password'
           onChange={(event) => setPassword(event.target.value)}
         />
-        <Button>Logar</Button>
+        <Button onClick={handleSubmit}>Logar</Button>
         <p className='text'>
           Não possui conta ainda?
           <br />

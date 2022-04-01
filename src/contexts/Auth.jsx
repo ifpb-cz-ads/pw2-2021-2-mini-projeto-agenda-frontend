@@ -4,14 +4,17 @@ import { useNavigate } from 'react-router-dom';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [token, setToken] = useState(false);
+
   const navigate = useNavigate();
 
   const login = (email, password, token, isAdmin) => {
     setIsAdmin(isAdmin);
-    setUser({ email, password, token });
-    console.log(user); // Está retornando null
+    setUser( {email, password, token });
+    setToken(`${token}`)
+    console.log(isAdmin); // Está retornando null
     navigate('/');
   };
 
@@ -22,7 +25,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ authenticated: !!user, isAdmin, login, logout }}
+      value={{ authenticated: !!user, isAdmin, token,login, logout }}
     >
       {children}
     </AuthContext.Provider>

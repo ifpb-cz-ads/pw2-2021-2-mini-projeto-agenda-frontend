@@ -40,13 +40,25 @@ body {
 header {
   padding: 0.4rem;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-around;
 
   color: white;
   font-size: 2rem;
   font-family: Lobster, sans-serif;
   background-color: var(--primary-green);
   box-shadow: 1px 1px #e7e7e7;
+}
+
+header p {
+  margin: 0 1rem 0 0;
+  color: white;
+  font-size: 2rem;
+  font-family: Lobster, sans-serif;
+}
+
+header i {
+  margin-right: 2rem;
 }
 
 a {

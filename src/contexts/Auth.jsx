@@ -12,9 +12,9 @@ export const AuthProvider = ({ children }) => {
 
   const login = (email, password, token, isAdmin) => {
     setIsAdmin(isAdmin);
-    setUser( {email, password, token });
-    setToken(`${token}`)
-    console.log(isAdmin); // Está retornando null
+    setUser({ email, password, token });
+    setToken(`${token}`);
+    console.log(isAdmin);
     navigate('/');
   };
 
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ authenticated: !!user, isAdmin, token,login, logout }}
+      value={{ authenticated: !!user, isAdmin, token, login, logout }}
     >
       {children}
     </AuthContext.Provider>

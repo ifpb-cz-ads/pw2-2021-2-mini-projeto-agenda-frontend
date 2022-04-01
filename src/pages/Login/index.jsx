@@ -19,8 +19,8 @@ export default function Login() {
         .then((res) => {
           const { token, isAdmin } = res.data;
           login(email, password, token, isAdmin);
-          localStorage.setItem('token',token);
-          console.log(res.data)
+          localStorage.setItem('isAdmin', isAdmin);
+          console.log(res.data);
         })
         .catch((err) => console.error(err));
     }

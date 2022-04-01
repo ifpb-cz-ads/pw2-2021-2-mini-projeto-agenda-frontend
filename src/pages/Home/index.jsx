@@ -3,7 +3,6 @@ import { AuthContext } from '../../contexts/Auth';
 import { Button, CancelButton } from '../../components/Button';
 import { Form } from '../../components/Form';
 import { Input } from '../../components/Input';
-// import ContactBox from '../../components/ContactBox';
 import api from '../../services';
 import '../../App.css';
 import {
@@ -21,28 +20,32 @@ export default function Home() {
   const [telefone, setTelefone] = useState('');
   const [isContactFormVisible, setIsContactFormVisible] = useState(false);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
-  const { token } = useContext(AuthContext);
-
   const [contacts, setContacts] = useState([]);
+  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     updateContactsDataList();
   }, []);
 
-
   async function updateContactsDataList() {
-    const responseData = await api.get('/contato').then((res) => res.data.contatos);
+    const responseData = await api
+      .get('/contato')
+      .then((res) => res.data.contatos);
     setContacts(responseData);
     console.log(contacts);
   }
 
   async function handleUpdate(id, name, email) {
     await api
-      .put(`contato/${id}`, { nome, telefone }, {
-        headers: {
-          Authorization: token,
+      .put(
+        `contato/${id}`,
+        { nome, telefone },
+        {
+          headers: {
+            Authorization: token,
+          },
         }
-      })
+      )
       .then((res) => {
         console.log(res.data);
         updateContactsDataList();
@@ -55,7 +58,7 @@ export default function Home() {
       .delete(`contato/${id}`, {
         headers: {
           Authorization: token,
-        }
+        },
       })
       .then((res) => {
         console.log(res.data);
@@ -129,8 +132,9 @@ export default function Home() {
           </div>
         </Form>
       )}
+
       <ContactsContainer>
-        {contacts.map(contact => (
+        {contacts.map((contact) => (
           <ContactContainer key={contact.id}>
             <TitleBox>{contact.nome}</TitleBox>
             <ContactText>Telefone: {contact.telefone}</ContactText>
@@ -138,20 +142,21 @@ export default function Home() {
               <IconDiv
                 borderRadius='0 0 0 0.6rem'
                 color='#2c6663'
-                onClick={() => handleUpdate(contact.id)} >
+                onClick={() => handleUpdate(contact.id)}
+              >
                 <Icon className='bi bi-pencil-fill'></Icon>
               </IconDiv>
               <IconDiv
                 borderRadius='0 0 0.6rem 0'
                 color='#d83c3c'
-                onClick={() => handleDelete(contact.id)}>
+                onClick={() => handleDelete(contact.id)}
+              >
                 <Icon className='bi bi-trash'></Icon>
               </IconDiv>
             </IconsDiv>
           </ContactContainer>
         ))}
       </ContactsContainer>
-
     </>
   );
 }

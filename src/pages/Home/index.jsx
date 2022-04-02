@@ -236,10 +236,14 @@ export default function Home() {
       </ContactsContainer>
 
       <button style={{ backgroundColor: 'transparent' }}
-      onClick={handleLogout}
+        onClick={handleLogout}
       >Sair</button>
 
-      <button style={{ backgroundColor: 'transparent' }}>Admin</button>
+      <button style={{ backgroundColor: 'transparent' }}>
+        <Link to="/admin">
+          Admin
+        </Link>
+      </button>
 
 
     </>

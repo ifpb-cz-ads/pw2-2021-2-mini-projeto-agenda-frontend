@@ -1,70 +1,38 @@
 import React, { useContext } from 'react';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from 'react-router-dom';
+import { BrowserRouter,  Routes,  Route} from 'react-router-dom';
 import Admin from './pages/Admin';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import RegisterConfirmation from './pages/RegisterConfirmation';
-import { AuthProvider, AuthContext } from './contexts/Auth';
+// import { AuthProvider, AuthContext } from './contexts/Auth';
 
-const AppRoutes = () => {
-  const Private = ({ children }) => {
-    const { authenticated } = useContext(AuthContext);
-
-    if (!authenticated) {
-      console.log(authenticated);
-      return <Navigate to='/login' />;
-    }
-
-    return children;
-  };
-
-  const PrivateAdmin = ({ children }) => {
-    const { isAdmin } = useContext(AuthContext);
-
-    if (!isAdmin) {
-      return <Navigate to='/' />;
-    }
-
-    return children;
-  };
+export default function Routs(){
 
   return (
-    <Router>
-      <AuthProvider>
+    <BrowserRouter>
         <Routes>
           <Route
             path='/admin'
+            caseSensitive={false} exact 
             element={
               // <PrivateAdmin>
-                <Admin />
+              <Admin />
               // </PrivateAdmin>
             }
           />
           <Route
-            path='/'
-            element={
-              <Private>
-                <Home />
-              </Private>
-            }
-          />
-          <Route path='/register' element={<Register />} />
-          <Route
-            path='/register-confirmation'
-            element={<RegisterConfirmation />}
-          />
-          <Route path='/login' element={<Login />} />
+            path='/' caseSensitive={false} exact element={<Login />}/>
+          <Route path='/register' caseSensitive={false} exact element={<Register />} />
+          <Route path='/register-confirmation' caseSensitive={false} exact element={<RegisterConfirmation />}/>
+          <Route path='/home' caseSensitive={false} exact 
+          element={
+          // <Private> 
+            <Home /> 
+          // </Private> 
+        } />
         </Routes>
-      </AuthProvider>
-    </Router>
+    </BrowserRouter>
   );
 };
 
-export default AppRoutes;
-export { AuthContext, AuthProvider };

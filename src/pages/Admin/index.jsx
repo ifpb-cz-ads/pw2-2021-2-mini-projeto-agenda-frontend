@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services';
+import { Button, CancelButton } from '../../components/Button';
+import { Form } from '../../components/Form';
+import { Input } from '../../components/Input';
 
 import {
   UserContainer,
@@ -14,14 +17,26 @@ import {
 export default function Admin() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [users, setUsers] = useState();
+  const [users, setUsers] = useState([]);
+
+  const [isEditFormVisible, setIsEditFormVisible] = useState(false);
+
+  const [admiUpdate, setadmiUpdate] = useState('');
+  const [telefoneUpdate, setTelefoneUpdate] = useState('');
+  const [idUpdate, setIdUpdate] = useState('')
+
+
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     updateUsersDataList();
-  }, []);
+  }, [token]);
 
   async function updateUsersDataList() {
-    const responseData = await api.get('/users').then((res) => res.data);
+    const responseData = await api.get('/users', {
+      headers: {
+        Authorization: token,
+      }}).then((res) => res.data);
     setUsers(responseData);
     console.log(responseData);
   }
@@ -47,16 +62,49 @@ export default function Admin() {
     <div className='App'>
       <h1 className='title'>Adicione, edite e exclua os usuários</h1>
 
+      {isEditFormVisible && (
+        <Form style={{ width: '25vw' }}>
+          <Input
+            placeholder={name}
+            type='text'
+            onChange={(event) => setName(event.target.value)}
+          />
+          <Input
+            placeholder={telefoneUpdate}
+            type='text'
+            maxLength='12'
+            onChange={(event) => setTelefoneUpdate(event.target.value)}
+          />
+          <div style={{ display: 'flex' }}>
+            <CancelButton
+              onClick={() => {
+                setIsEditFormVisible(false);
+              }}
+            >
+              Cancelar
+            </CancelButton>
+            <Button onClick={handleUpdate}>salvar</Button>
+          </div>
+        </Form>
+      )}
+
       <UsersContainer>
-        {users.map(user => (
+        {users.map((user) => (
           <UserContainer key={user.id}>
-            <TitleBox>{user.nome}</TitleBox>
+            <TitleBox>{user.username}</TitleBox>
             <UserText>Email: {user.email}</UserText>
+            <UserText>Admin: {user.isAdmin?"sim":"Não"}</UserText>
+            <UserText>Verify: {user.isVerified?"Sim":"Não"}</UserText>
+
             <IconsDiv>
               <IconDiv
                 borderRadius='0 0 0 0.6rem'
                 color='#2c6663'
-                onClick={() => handleUpdate(user.id)} >
+                onClick={() => {
+                  setIsEditFormVisible(true)
+                  setName(user.username)
+
+                }} >
                 <Icon className='bi bi-pencil-fill'></Icon>
               </IconDiv>
               <IconDiv

@@ -5,6 +5,9 @@ import { Form } from '../../components/Form';
 import { Input } from '../../components/Input';
 import api from '../../services';
 import '../../App.css';
+
+import { Link, useNavigate } from "react-router-dom"
+
 import {
   ContactContainer,
   ContactsContainer,
@@ -19,9 +22,22 @@ export default function Home() {
   const [nome, setNome] = useState('');
   const [telefone, setTelefone] = useState('');
   const [isContactFormVisible, setIsContactFormVisible] = useState(false);
+  const [isEditFormVisible, setIsEditFormVisible] = useState(false);
+
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [contacts, setContacts] = useState([]);
-  const { token } = useContext(AuthContext);
+  // const { token } = useContext(AuthContext);
+  const history = useNavigate();
+
+  const token = localStorage.getItem("token");
+  const admin = localStorage.getItem("isAdmin");
+
+  const [nomeUpdate, setNomeUpdate] = useState('');
+  const [telefoneUpdate, setTelefoneUpdate] = useState('');
+  const [idUpdate, setIdUpdate] = useState('')
+
+  console.log(admin)
+
 
   useEffect(() => {
     updateContactsDataList();
@@ -32,25 +48,35 @@ export default function Home() {
       .get('/contato')
       .then((res) => res.data.contatos);
     setContacts(responseData);
-    console.log(contacts);
+    // console.log(contacts);
   }
 
-  async function handleUpdate(id, name, email) {
-    await api
-      .put(
-        `contato/${id}`,
-        { nome, telefone },
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        updateContactsDataList();
-      })
-      .catch((err) => console.error(err));
+  async function handleUpdate(e) {
+    e.preventDefault()
+
+    const data = {
+      id: idUpdate,
+      nome: nomeUpdate,
+      telefone: telefoneUpdate
+    }
+    try {
+      await api
+        .put(
+          `/contato/${idUpdate}`, data,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
+      updateContactsDataList();
+      limpar()
+      setIsEditFormVisible(false)
+      setIsButtonVisible(true)
+
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async function handleDelete(id) {
@@ -61,7 +87,6 @@ export default function Home() {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setContacts(contacts.filter((contact) => contacts.id !== id));
         updateContactsDataList();
       })
@@ -87,11 +112,28 @@ export default function Home() {
     setIsContactFormVisible(false);
     setIsButtonVisible(true);
     updateContactsDataList();
+    limpar()
   }
+
+  function limpar() {
+    setNome("")
+    setTelefone("")
+    setTelefoneUpdate('')
+    setNomeUpdate('')
+  }
+
+  function handleLogout() {
+    localStorage.clear();
+    history("/")
+
+  }
+
 
   return (
     <>
       <p className='title'>Crie, edite e gerencie seus contatos</p>
+
+
 
       {isButtonVisible && (
         <div className='Add-button'>
@@ -133,6 +175,34 @@ export default function Home() {
         </Form>
       )}
 
+      {isEditFormVisible && (
+        <Form style={{ width: '25vw' }}>
+          <Input
+            placeholder={nomeUpdate}
+            type='text'
+            onChange={(event) => setNomeUpdate(event.target.value)}
+          />
+          <Input
+            placeholder={telefoneUpdate}
+            type='text'
+            maxLength='12'
+            onChange={(event) => setTelefoneUpdate(event.target.value)}
+          />
+          <div style={{ display: 'flex' }}>
+            <CancelButton
+              onClick={() => {
+                setIsEditFormVisible(false);
+                setIsButtonVisible(true);
+              }}
+            >
+              Cancelar
+            </CancelButton>
+            <Button onClick={handleUpdate}>salvar</Button>
+          </div>
+        </Form>
+      )}
+
+
       <ContactsContainer>
         {contacts.map((contact) => (
           <ContactContainer key={contact.id}>
@@ -142,7 +212,14 @@ export default function Home() {
               <IconDiv
                 borderRadius='0 0 0 0.6rem'
                 color='#2c6663'
-                onClick={() => handleUpdate(contact.id)}
+                onClick={() => {
+                  setIsEditFormVisible(true)
+                  setIsButtonVisible(false)
+                  setNomeUpdate(contact.nome)
+                  setTelefoneUpdate(contact.telefone)
+                  setIdUpdate(contact.id)
+
+                }}
               >
                 <Icon className='bi bi-pencil-fill'></Icon>
               </IconDiv>
@@ -157,6 +234,14 @@ export default function Home() {
           </ContactContainer>
         ))}
       </ContactsContainer>
+
+      <button style={{ backgroundColor: 'transparent' }}
+      onClick={handleLogout}
+      >Sair</button>
+
+      <button style={{ backgroundColor: 'transparent' }}>Admin</button>
+
+
     </>
   );
 }
